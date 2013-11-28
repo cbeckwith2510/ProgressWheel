@@ -81,6 +81,8 @@ public class ProgressWheel extends View {
 	int progress = 0;
 	boolean isSpinning = false;
 	
+	int maximum = 360;
+	
 	//Other
 	private String text = "";
 	private String[] splitText = {};
@@ -228,14 +230,23 @@ public class ProgressWheel extends View {
 	
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
+		
+		if(progress > maximum){
+            		progress = progress-maximum;
+            	}
+                        
+            	double per = ((progress*100)/maximum);
+            
+            	final float progress1 = (float)((360*per)/100);
+		
 		//Draw the rim
 		canvas.drawArc(circleBounds, 360, 360, false, rimPaint);
 		//Draw the bar
 		if(isSpinning) {
-			canvas.drawArc(circleBounds, progress - 90, barLength, false,
+			canvas.drawArc(circleBounds, progress1 - 90, barLength, false,
 				barPaint);
 		} else {
-			canvas.drawArc(circleBounds, -90, progress, false, barPaint);
+			canvas.drawArc(circleBounds, -90, progress1, false, barPaint);
 		}
 		//Draw the inner circle
 		canvas.drawCircle((circleBounds.width()/2) + rimWidth + paddingLeft, 
@@ -298,6 +309,18 @@ public class ProgressWheel extends View {
 	    progress=i;
 	    spinHandler.sendEmptyMessage(0);
 	}
+	
+	/**
+     * Set/Get Maximum Range to Progress Bar
+     * */
+    
+    	public void setMax(int max){
+    		maximum = max;
+    	}
+    
+    	public int getMax(){
+    		return maximum;
+    	}
 	
 	//----------------------------------
 	//Getters + setters
